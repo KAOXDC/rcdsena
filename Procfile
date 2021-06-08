@@ -1,1 +1,1 @@
-web: gunicorn rcdsena.wsgi -b 0.0.0.0:$PORT
+web: gunicorn rcd.wsgi -b 0.0.0.0:$PORT
