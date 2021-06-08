@@ -28,7 +28,7 @@ SECRET_KEY = '36=nv^ainqnak5n0-r@36p54lr%8(h3@+m4mlsnv#cc-yw(@er'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['rcdsena.herokuapp.com']
 
 
 # Application definition
