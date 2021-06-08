@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+
+{% block section %}
+    <div class="page-title-icon">
+        <i class="fa fa-list-alt icon-gradient bg-happy-itmeo"></i>
+    </div>
+    <div>
+        Muestras
+        <div class="page-title-subheading">
+            Lista de muestras de Residuos       
+        </div>
+    </div>
+{% endblock section %}
+    
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 col-xl-4">
+            <div class="card mb-3 widget-content bg-midnight-bloom">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">Muestras Totales</div>
+                        <div class="widget-subheading">cantidad de todas las muestras</div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers text-white"><span>{{ samples_count }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% if ctx_person.rol == 'instructor' %}
+            
+        
+        <div class="col-md-6 col-xl-4">
+            <div class="card mb-3 widget-content bg-arielle-smile">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">Usuarios Registrados</div>
+                        <div class="widget-subheading">Total de Usuarios Registrados</div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers text-white"><span>{{ users_count }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if ctx_person.user == False %}    
+        <div class="col-md-6 col-xl-4">
+            <div class="card mb-3 widget-content bg-grow-early">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">Followers</div>
+                        <div class="widget-subheading">People Interested</div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers text-white"><span>46%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+
+    </div>
+    
+    {% if person.rol == 'instructor' or person.rol == 'aprendiz' %}
+        <div>
+            <a href="{% url 'sample_add' %}" class="mb-2 mr-2 btn btn-primary"> 
+                <i class="fa fa-plus-circle"></i>
+                Nueva Muestra 
+            </a>
+        </div>        
+    {% endif %}
+        
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="main-card mb-3 card">
+                <div class="card-header">Muestras 
+                    <div class="btn-actions-pane-right">
+                        <div role="group" class="btn-group-sm btn-group">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th>Fecha</th>
+                            <th class="text-center">Volumen m<sup>3</sup></th>
+                            <th class="text-center">Metodo de Medicion</th>
+                            <th class="text-center">Origen Probable</th>
+                            <th class="text-center">Objeto</th>
+                            <th class="text-center">Usuraio</th>
+                            <th class="text-center">Opciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        
+                        {% for s in samples %}
+                        
+                            <tr>
+                                <td class="text-center text-muted">{{ s.id }}</td>
+                                <td>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-3">
+                                                <div class="widget-content-left">
+                                                    <img width="40" class="rounded-circle" src="assets/images/avatars/4.jpg" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-left flex2">
+                                                <div class="widget-heading">{{ s.date_time.date }}</div>
+                                                <div class="widget-subheading opacity-7">{{ s.date_time|time:"h:i a" }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">{{ s.volume }} m<sup>3</sup></td>
+                                <td class="text-center">{{ s.demolition_method }}</td>
+                                <td class="text-center">{{ s.origin }}
+                                </td>
+                                <td class="text-center">{{ s.demolition_object }}</td>
+                                <td>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-3">
+                                                <div class="widget-content-left">
+                                                    <img width="40" height="40px" class="rounded-circle" src="{{ s.person.photo.url }}" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-left flex2">
+                                                <div class="widget-heading">{{ s.person.user.first_name }} {{ s.person.user.last_name }}</div>
+                                                <div class="widget-subheading opacity-7">{{ s.person.rol }} 
+                                                    <i class="pe-7s-phone"></i>
+                                                    {{ s.person.phone }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                
+                                
+                                
+                                <td class="text-center">
+                                    <a href="{% url 'sample_detail' id_sample=s.id %}" type="button" id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-info"><i class="fa fa-eye"></i></a>
+                                    {% if person.rol == 'instructor' or person.rol == 'aprendiz' %}
+                                        <a href="{% url 'sample_edit' id_sample=s.id %}" id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-warning"><i class="fa fa-edit"></i></a>
+                                        <a href="{% url 'sample_delete' id_sample=s.id %}" id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                                    {% endif %}
+                                           
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock content %}
+
+
+
+
+{% block js %}
+{% endblock js %}
+    

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block section %}
+<div class="page-title-icon">
+    <i class="fa fa-plus-circle icon-gradient bg-happy-itmeo"></i>
+</div>
+<div>
+    Nuevo Usuario 
+    <div class="page-title-subheading">
+        Agrega todos los datos del nuevo usuario
+    </div>
+</div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-3"></div>
+
+        <div class="col-md-6">
+            <div class="main-card mb-3 card">
+                {% if messages %}
+                <div class="alert alert-success fade show" role="alert">
+                    <h4 class="alert-heading">Well done!</h4>
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+                        {% endfor %}
+                    </ul>   
+                    <hr>
+                    <p class="mb-0">Si desea ver el elemento guardado presione.
+                        <a href="{% url 'person_detail' id_person=p.id %}">aqui</a>
+                    </p>
+                </div>
+                {% endif %}
+
+                <div class="card-body"><h5 class="card-title">Agregar Nuevo Usuario</h5>
+                    {% load cloudinary %}
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {% for fields_u in form_user %}
+                            <div class="position-relative form-group">
+                                {{ fields_u.errors }}
+                                {{ fields_u.label }}
+                                {{ fields_u }}
+                            </div>  
+                        {% endfor %}
+                                                    
+                        {% for field in form %}
+                            <div class="position-relative form-group">
+                                {{field.errors}}
+                                {{field.label}}
+                                {{field}}
+                            </div>
+                        {% endfor %}
+                        <hr>
+                        <input type="submit" value="Guardar" class="mt-1 btn btn-primary">
+                    </form>
+                    </div>
+                </div>
+            </div>
+
+            
+    </div>
+
+{% endblock %}

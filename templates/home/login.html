@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="es">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+    <meta name="description" content="This is an example dashboard created using build-in elements and components.">
+    <meta name="msapplication-tap-highlight" content="no">
+    <link href="{% static '/css/main.css' %}" rel="stylesheet">
+    <title>Login</title>
+    
+    
+</head>
+<body>
+
+    <div class="app-main__inner">
+        
+        <div class="tab-content">
+            <div class="tab-pane tabs-animation fade show active" id="tab-content-0" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+
+                        <div class="main-card mb-3 card">
+                            <div class="card-body">
+                                <center>
+                                    <img src="{% static 'images/logo.png' %}" alt="" width="20%">
+                                </center>
+                                <h5 class="card-title">Iniciar Sesión <br> RDC </h5>
+                                {% if msg %}
+                                <div class="alert alert-danger fade show" role="alert">
+                                    <h4 class="alert-heading">No se puede Iniciar Sesión!</h4>
+                                    <ul class="messages">
+                                        <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ msg }} </li>
+                                    </ul>   
+                                    <hr>
+                                    <p class="mb-0">{{ msg }} si el problema persiste contacta con el Administrador
+                                        <a href="mailto:dpradoo4@sena.edu.co"> clic aqui </a>
+                                    </p>
+                                </div>
+                                {% endif %}
+                
+
+
+                                <form action="" method="POST">
+                                    {% csrf_token %}
+                                    {% for fields_u in form %}
+                                        <div class="position-relative form-group">
+                                            {{ fields_u.errors }}
+                                            {{ fields_u.label }}
+                                            {{ fields_u }}
+                                        </div>  
+                                    {% endfor %}                                    
+                                    <input type="submit" value="Iniciar sesión" class="mt-1 btn btn-primary">
+                                </form>
+                                                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>

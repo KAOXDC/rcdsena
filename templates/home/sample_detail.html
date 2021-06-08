@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block section %}
+    <div class="page-title-icon">
+        <i class="fa fa-file icon-gradient bg-happy-itmeo"></i>
+    </div>
+    <div>
+        Detalle de la Muestra
+        <div class="page-title-subheading">
+            Ver el detalle de la muestra
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="main-card mb-3 card">
+                <div class="card-body">
+                    <h5 class="card-title">Ver detalle de la Muestra </h5>
+                    <h6 class="card-subtitle">Registro de la muestra de RCD</h6>                
+                    <table class="mb-0 table table-bordered">
+                        <thead>
+                            <tr>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Fecha y Hora</th>
+                                <td><h6>{{sample.date_time}}</h6></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Volumen (m<sup>3</sup>)</th>
+                                <td><h6>{{ sample.volume }}</h6></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Forma de demolición</th>
+                                <td><h6>{{ sample.demolition_method }}</h6></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Origen probale</th>
+                                <td><h6>{{ sample.origin }}</h6></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Motivo</th>
+                                <td><h6>{{ sample.demolition_object }}</h6></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Registro por</th>
+                                <td><h6>{{ sample.person.user.first_name }} {{ sample.person.user.last_name }}</h6></td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="main-card mb-3 card">
+                <div class="card-body">
+                    <h6>Foto:</h6>
+                    
+                    {% if sample.photo %}
+                        <img src="{{ sample.photo.url }}" alt="" height="100px">               
+                    {% else %}
+                    <div class="alert alert-warning fade show" role="alert">
+                        esta muestra no dispone de evidencia fotografica, de clic  
+                        <a href="{% url 'sample_edit' id_sample=sample.id %}" class="alert-link">aqui</a> para editar esta muestra y agregar una foto.
+                    </div>
+                    {% endif %}
+                        
+                </div>
+            </div>
+        </div>
+        
+        {% if person.rol == 'aprendiz' %}
+            <a class="btn btn-secondary" href="{% url 'sample_list' %}">Ver Todas las muestras</a>
+        {% else %}
+            <a class="btn btn-secondary" href="{% url 'my_sample_list' %}">Ver mi lista de muestras</a>
+        {% endif %}
+            
+    </div>
+{% endblock content %}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

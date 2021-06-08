@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+
+{% block section %}
+    <div class="page-title-icon">
+        <i class="fa fa-list-alt icon-gradient bg-happy-itmeo"></i>
+    </div>
+    <div>
+        Usuarios
+        <div class="page-title-subheading">
+            Lista de Uasuarios del sistema       
+        </div>
+    </div>
+{% endblock section %}
+    
+{% block content %}
+
+        <!-- SEARCH BEGIN -->
+
+        <center>
+                <div class="col-md-6">
+                    <div class="main-card mb-3 card ">
+                        {% if msg %}
+                        <div class="alert alert-info fade show" role="alert">
+                            <ul class="messages">
+                                <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ msg }} </li>
+                            </ul>   
+                        </div>
+                        {% endif %}
+                        <div class="card-body">
+                            
+                            <form class="form-inline" action="" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}                                                        
+                                {% for field in form %}
+                                    <div class="position-relative form-group">
+                                        {{field.errors}}
+                                        {{field.label}} <pre> </pre>
+                                        {{field}} <pre> </pre>
+                                    </div>
+                                {% endfor %}
+                                <input type="submit" value="Buscar Usuario" class="btn btn-primary">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </center>
+
+            <!-- END OF SEARCH -->
+    
+    
+
+
+
+    {% if person.rol == 'instructor' %}
+        <div>
+            <a href="{% url 'person_add' %}" class="mb-2 mr-2 btn btn-primary"> 
+                <i class="fa fa-plus-circle"></i>
+                Nueva Usuario 
+            </a>
+        </div>        
+    {% endif %}
+        
+    
+    {% if persons %}
+        
+        
+    <div class="row">
+        <div class="col-md-12">
+            <div class="main-card mb-3 card">
+                <div class="card-header">Usuarios 
+                    <div class="btn-actions-pane-right">
+                        <div role="group" class="btn-group-sm btn-group">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th>Username</th>
+                            <th class="text-center">Nombres y Apellidos</th>
+                            <th class="text-center">Rol</th>
+                            <th class="text-center">Correo</th>
+                            <th class="text-center">Telefono</th>
+                            <th class="text-center">Estado</th>
+                            <th class="text-center">Opciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        
+                        {% for s in persons %}
+                        
+                            <tr>
+                                <td class="text-center text-muted">{{ s.id }}</td>
+                                <td>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-3">
+                                                <div class="widget-content-left">
+                                                    <img width="40" class="rounded-circle" src="assets/images/avatars/4.jpg" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-left flex2">
+                                                <div class="widget-heading">{{ s.user.username }} </div>
+                                                <div class="widget-subheading opacity-7">Ultimo ingreso: {{ s.user.last_login}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-3">
+                                                <div class="widget-content-left">
+                                                    <img width="40" class="rounded-circle" src="{{ s.photo.url }}" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-left flex2">
+                                                <div class="widget-heading">{{ s.user.first_name }} {{ s.user.last_name }}</div>
+                                                <div class="widget-subheading opacity-7">{{ s.rol }} 
+                                                    {{ s.person.phone }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">{{ s.rol }}</td>
+                                <td class="text-center">{{ s.user.email }}
+                                <td class="text-center">{{ s.phone }}
+
+                                <td class="text-center">
+                                    {% if s.user.is_active %}
+                                        <div class="mb-2 mr-2 badge badge-success">
+                                            <i class="fa fa-user"> </i> 
+                                            <i class="fa fa-check"> </i> 
+                                        </div> 
+                                        <a href="" class="mb-2 mr-2 badge badge-secondary">Inactivar</a>
+                                    {% else %}
+                                        <div class="mb-2 mr-2 badge badge-secondary">
+                                            <i class="fa fa-user-times"></i>
+                                            <a href="" class="mb-2 mr-2 badge badge-info">Activar</a>
+                                        </div> 
+                                    {% endif %}
+                                </td>
+                                
+                                
+                                
+                                <td class="text-center">
+                                    <a href="{% url 'person_detail' id_person=s.id %}" type="button" id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-info"><i class="fa fa-eye"></i></a>
+                                    {% if person.rol == 'instructor' %}
+                                        <a href="{% url 'person_edit' id_person=s.id %}" id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-warning"><i class="fa fa-edit"></i></a>
+                                        <a href="{% url 'person_delete' id_person=s.id %}" id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                                    {% endif %}
+                                           
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+
+        <div class="col-md-6 col-xl-4">
+            <div class="card mb-3 widget-content bg-midnight-bloom">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">Usuarios Totales Totales</div>
+                        <div class="widget-subheading">cantidad de todos los Usuarios</div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers text-white"><span>{{ users }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <div class="card mb-3 widget-content bg-arielle-smile">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">Instructores Registrados</div>
+                        <div class="widget-subheading">Total de Instructores Registrados</div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers text-white"><span>{{ instructors }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <div class="card mb-3 widget-content bg-grow-early">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">Aprendices Registrados</div>
+                        <div class="widget-subheading">total de aprendices registrados</div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers text-white"><span>{{ aprentices }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% endif %}
+
+{% endblock content %}
+
+
+
+
+{% block js %}
+{% endblock js %}
+    
