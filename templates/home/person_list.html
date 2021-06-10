@@ -125,7 +125,7 @@
                                     </div>
                                 </td>
                                 <td class="text-center">{{ s.rol }}</td>
-                                <td class="text-center">{{ s.user.email }}
+                                <td class="text-center">{{ s.email }}
                                 <td class="text-center">{{ s.phone }}
 
                                 <td class="text-center">
@@ -134,12 +134,12 @@
                                             <i class="fa fa-user"> </i> 
                                             <i class="fa fa-check"> </i> 
                                         </div> 
-                                        <a href="" class="mb-2 mr-2 badge badge-secondary">Inactivar</a>
+                                        <a href="{% url 'person_status' id_person=s.id %}" class="mb-2 mr-2 badge badge-secondary">Inactivar</a>
                                     {% else %}
                                         <div class="mb-2 mr-2 badge badge-secondary">
                                             <i class="fa fa-user-times"></i>
-                                            <a href="" class="mb-2 mr-2 badge badge-info">Activar</a>
                                         </div> 
+                                        <a href="{% url 'person_status' id_person=s.id %}" class="mb-2 mr-2 badge badge-info">Activar</a>
                                     {% endif %}
                                 </td>
                                 

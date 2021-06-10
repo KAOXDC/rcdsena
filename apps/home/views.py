@@ -88,20 +88,21 @@ def profile_edit_view (request):
 	person = connected_user(request.user)
 	user = User.objects.get(id = request.user.id)
 	if request.method == 'POST':
-		form_user = user_form(request.POST, instance=user)
+		form_user = profile_form(request.POST, instance=user)
 		form = person_form(request.POST, request.FILES, instance=person)
 		if form_user.is_valid() and form.is_valid():
 			u = form_user.save(commit=False)
-			u.username = form_user.cleaned_data['email']
+			p = u.password
+			if form_user.cleaned_data['pass_1'] != '' and form_user.cleaned_data['pass_2'] != '': 
+				u.set_password(form_user.cleaned_data['pass_1'])
 			u.save()
 			p = form.save(commit=False)
 			p.user = u 
 			p.save()
 	else:
-		form_user = user_form(instance=user)
+		form_user = profile_form(instance=user)
 		form = person_form(instance=person)
 	return render(request, 'home/person_edit.html', locals())
-
 
 def person_add_view(request):
     
@@ -111,7 +112,7 @@ def person_add_view(request):
 		if form_user.is_valid() and form.is_valid():
 			u = form_user.save(commit=False)
 			u.set_password(form.cleaned_data['document'])
-			u.username = form_user.cleaned_data['email']
+			u.username = form.cleaned_data['email']
 			u.save()
 			p = form.save(commit=False)
 			p.user = u 
@@ -121,7 +122,6 @@ def person_add_view(request):
 		form_user = user_form()
 		form = person_form()
 	return render(request, 'home/person_add.html', locals())
-
 
 def person_list_view (request):
 	
@@ -158,7 +158,9 @@ def person_edit_view (request, id_person):
 		form = person_form(request.POST, request.FILES, instance=person)
 		if form_user.is_valid() and form.is_valid():
 			u = form_user.save(commit=False)
-			u.username = form_user.cleaned_data['email']
+			u.username = form.cleaned_data['email']
+			if form.cleaned_data['document'] != '':
+				u.set_password(form.cleaned_data['document'])
 			u.save()
 			p = form.save(commit=False)
 			p.user = u 
@@ -173,7 +175,21 @@ def person_detail_view(request, id_person):
 	object = Person.objects.get(id = id_person)
 	return render(request, 'home/person_detail.html',locals()) 
 
-
+def person_status_view (request, id_person):
+	object = Person.objects.get(id = id_person)
+	u = User.objects.get(id = object.user.id)
+	if  object.user.is_active == True:
+		u.is_active = False
+		u.save()
+		msg = 'Usuario Inactivo'
+	elif object.user.is_active == False:
+		u.is_active = True
+		u.save()
+		msg = 'Usuario Activo'
+	else:
+		msg = 'el usuario no se pudo cambiar el estado del usuario'
+	print(msg)
+	return redirect('/person_detail/{}'.format(object.id))
 
 '''
 Samples Section: list, add, detail, edit and delete views
@@ -182,7 +198,7 @@ Samples Section: list, add, detail, edit and delete views
 @login_required (login_url = '/login/')
 def my_sample_list_view (request):
 	person = connected_user(request.user)
-	samples = Sample.objects.filter(person = person)
+	samples = Sample.objects.filter(person = person).order_by('-id')
 	samples_count = samples.count
 	users_count = Person.objects.count()
 	print(person)
@@ -192,7 +208,7 @@ def my_sample_list_view (request):
 #@connected_person_decorator
 def sample_list_view (request):
 	person = connected_user(request.user)
-	samples = Sample.objects.filter()
+	samples = Sample.objects.filter().order_by('-id')
 	samples_count = samples.count
 	users_count = Person.objects.count()
 	print(person)

@@ -5,6 +5,7 @@ from .models import *
 admin.site.register(Person)
 admin.site.register(Type)
 admin.site.register(Component)
+admin.site.register(Origin)
 admin.site.register(Sample)
 
 

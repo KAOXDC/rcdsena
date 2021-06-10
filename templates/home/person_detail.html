@@ -39,7 +39,7 @@
                             </tr>
                             <tr>
                                 <th scope="row">Correo</th>
-                                <td><h6>{{ object.user.email }}</h6></td>
+                                <td><h6>{{ object.email }}</h6></td>
                             </tr>
                             <tr>
                                 <th scope="row">Celular</th>
@@ -48,6 +48,29 @@
                             <tr>
                                 <th scope="row">Rol</th>
                                 <td><h6>{{ object.rol }}</h6></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Estado</th>
+                                <td>
+                                    <h6>
+
+                                        {% if object.user.is_active %}
+                                            <div class="mb-2 mr-2 badge badge-success">
+                                                <i class="fa fa-user"> </i> 
+                                                <i class="fa fa-check"> </i> 
+                                            </div> 
+                                            <a href="{% url 'person_status' id_person=object.id %}" class="mb-2 mr-2 badge badge-secondary">Inactivar</a>
+                                            usuario activo, clic para inactivar
+                                        {% else %}
+                                            <div class="mb-2 mr-2 badge badge-secondary">
+                                                <i class="fa fa-user-times"> </i>
+                                            </div> 
+                                            <a href="{% url 'person_status' id_person=object.id %}" class="mb-2 mr-2 badge badge-info">Activar</a>
+                                            usuario inactivo, clic para activar
+                                        {% endif %}
+
+                                    </h6>
+                                </td>
                             </tr>
                         </tbody>
                         

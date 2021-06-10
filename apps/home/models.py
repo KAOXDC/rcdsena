@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.fields import EmailField
 from cloudinary.models import CloudinaryField
 
 
@@ -27,6 +28,7 @@ class Person(models.Model):
     document            = models.CharField(max_length = 10, unique = True)
     phone               = models.CharField(max_length = 20, null=True, blank= True)
     #photo               = models.ImageField(upload_to = 'persons', null=True, blank= True)
+    email               = models.EmailField(unique=True)
     photo               = CloudinaryField(null=True, blank= True)
     rol                 = models.CharField(max_length = 15, choices = roles)
     user                = models.OneToOneField(User, models.PROTECT)
@@ -49,8 +51,8 @@ class Type(models.Model):
     class Meta:
         """Meta definition for Type."""
 
-        verbose_name = 'Type'
-        verbose_name_plural = 'Types'
+        verbose_name = 'Tipo de componente'
+        verbose_name_plural = 'Tipos de componentes'
 
     def __str__(self):
         """Unicode representation of Type."""
@@ -64,29 +66,45 @@ class Component(models.Model):
     class Meta:
         """Meta definition for Component."""
 
-        verbose_name = 'Component'
-        verbose_name_plural = 'Components'
+        verbose_name = 'Componente'
+        verbose_name_plural = 'Componentes'
 
     def __str__(self):
         """Unicode representation of Component."""
         return self.type_name.name + ' ' + self.name
 
+class Origin(models.Model):
+    """Model definition for Origin."""
+
+    name        = models.CharField(max_length= 100)
+    class Meta:
+        """Meta definition for Origin."""
+
+        verbose_name = 'Origen'
+        verbose_name_plural = 'Origines'
+
+    def __str__(self):
+        """Unicode representation of Component."""
+        return self.name
+
 class Sample(models.Model):
     """Model definition for Sample."""
     date_time           = models.DateTimeField(auto_now_add = True) 
     volume              = models.DecimalField(max_digits = 6, decimal_places= 2)
-    demolition_method   = models.CharField(max_length = 50, choices = methods)
-    origin              = models.CharField(max_length = 50, choices = origins)
-    demolition_object   = models.CharField(max_length = 50, choices = reasons)
+    #demolition_method   = models.CharField(max_length = 50, choices = methods)
+    #origin              = models.CharField(max_length = 50, choices = origins)
     #photo               = models.ImageField(upload_to = 'samples', null=True, blank= True)
+    #demolition_object   = models.CharField(max_length = 50, choices = reasons)
     photo               = CloudinaryField('samples', null=True, blank= True)
+    components          = models.ForeignKey(Component, models.PROTECT)
+    origin              = models.ForeignKey(Origin, models.PROTECT)
     person              = models.ForeignKey(Person, models.PROTECT)
 
     class Meta:
         """Meta definition for Sample."""
 
-        verbose_name = 'Sample'
-        verbose_name_plural = 'Samples'
+        verbose_name = 'Muestra'
+        verbose_name_plural = 'Muestras'
 
     def __str__(self):
         """Unicode representation of Sample."""

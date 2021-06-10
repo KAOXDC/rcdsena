@@ -92,9 +92,8 @@
                             <th class="text-center">#</th>
                             <th>Fecha</th>
                             <th class="text-center">Volumen m<sup>3</sup></th>
-                            <th class="text-center">Metodo de Medicion</th>
-                            <th class="text-center">Origen Probable</th>
-                            <th class="text-center">Objeto</th>
+                            <th class="text-center">Componentes</th>
+                            <th class="text-center">Origen</th>
                             <th class="text-center">Usuraio</th>
                             <th class="text-center">Opciones</th>
                         </tr>
@@ -104,7 +103,7 @@
                         {% for s in samples %}
                         
                             <tr>
-                                <td class="text-center text-muted">{{ s.id }}</td>
+                                <td class="text-center text-muted">{{ forloop.counter }}</td>
                                 <td>
                                     <div class="widget-content p-0">
                                         <div class="widget-content-wrapper">
@@ -121,10 +120,9 @@
                                     </div>
                                 </td>
                                 <td class="text-center">{{ s.volume }} m<sup>3</sup></td>
-                                <td class="text-center">{{ s.demolition_method }}</td>
+                                <td class="text-center">{{ s.components }}</td>
                                 <td class="text-center">{{ s.origin }}
                                 </td>
-                                <td class="text-center">{{ s.demolition_object }}</td>
                                 <td>
                                     <div class="widget-content p-0">
                                         <div class="widget-content-wrapper">

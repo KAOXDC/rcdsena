@@ -30,19 +30,15 @@
                             </tr>
                             <tr>
                                 <th scope="row">Volumen (m<sup>3</sup>)</th>
-                                <td><h6>{{ sample.volume }}</h6></td>
+                                <td><h6>{{ sample.volume }} m<sup>3</sup></h6></td>
                             </tr>
                             <tr>
-                                <th scope="row">Forma de demolición</th>
-                                <td><h6>{{ sample.demolition_method }}</h6></td>
+                                <th scope="row">Componentes</th>
+                                <td><h6>{{ sample.components }}</h6></td>
                             </tr>
                             <tr>
                                 <th scope="row">Origen probale</th>
                                 <td><h6>{{ sample.origin }}</h6></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Motivo</th>
-                                <td><h6>{{ sample.demolition_object }}</h6></td>
                             </tr>
                             <tr>
                                 <th scope="row">Registro por</th>
@@ -60,8 +56,13 @@
                     <h6>Foto:</h6>
                     
                     {% if sample.photo %}
-                        <img src="{{ sample.photo.url }}" alt="" height="100px">               
-                    {% else %}
+                        <center>
+
+                            <img src="{{ sample.photo.url }}" alt="" height="120px">
+                            <hr>      
+                            <a href="{{ sample.photo.url }}"> Ver imagen en pantalla completa </a>             
+                        </center>
+                        {% else %}
                     <div class="alert alert-warning fade show" role="alert">
                         esta muestra no dispone de evidencia fotografica, de clic  
                         <a href="{% url 'sample_edit' id_sample=sample.id %}" class="alert-link">aqui</a> para editar esta muestra y agregar una foto.

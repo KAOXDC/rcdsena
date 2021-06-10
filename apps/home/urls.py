@@ -11,7 +11,8 @@ urlpatterns = [
     path('person_detail/<int:id_person>', person_detail_view, name = 'person_detail'),
     path('person_edit/<int:id_person>', person_edit_view, name = 'person_edit'),
     path('person_delete/<int:id_person>', person_delete_view, name = 'person_delete'),
-
+    path('person_status/<int:id_person>', person_status_view, name = 'person_status'),
+    
     path('my_sample_list/', my_sample_list_view, name = 'my_sample_list'),
     path('sample_list/', sample_list_view, name = 'sample_list'),
     path('sample_add/', sample_add_view, name = 'sample_add'),
