@@ -8,9 +8,9 @@ from django.contrib.auth.models import User
 
 class search_form (forms.Form):
 	search = forms.CharField(
-		label='Buscar Usuario ',
+		label='Buscar ',
 		required=False,
-		widget=forms.TextInput(attrs={'class':'form-control',  'placeholder':'Por nombre, apelllidos, No. identificacion'})
+		widget=forms.TextInput(attrs={'class':'form-control',  'placeholder':'Ingrese su criterio de busqueda'})
 		)
 class login_form (forms.Form):
 	username    = forms.CharField(
@@ -89,10 +89,59 @@ class sample_add_form (forms.ModelForm):
 		model = Sample
 		fields = '__all__'
 		exclude = ['person', ]
+		labels = {
+			'volume': 'Volumen en Metros Cubicos',
+			'components': 'Componentes',
+			'origin': 'Origen',
+		}
 
 	def __init__(self, *args, **kwargs):
 		super(sample_add_form, self).__init__(*args, **kwargs)
 		for field in self.fields:	
 			self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+class course_add_form (forms.ModelForm):
+	class Meta:
+		model = Course
+		fields = '__all__'
+		exclude = ['status',]
+		labels ={
+			'name':'Ficha',
+			'initial_date':'Fecha Inicio',
+			'final_date':'Fecha Fin',
+			'program':'Programa',
+		}
+
+	def __init__(self, *args, **kwargs):
+		super(course_add_form, self).__init__(*args, **kwargs)
+		for field in self.fields:	
+			self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+class program_add_form (forms.ModelForm):
+	class Meta:
+		model = Program
+		fields = '__all__'
+		labels = {
+			'name':'Nombre',
+			'area':'Área',
+		}
+	
+	def __init__(self, *args, **kwargs):
+		super(program_add_form, self).__init__(*args, **kwargs)
+		for field in self.fields:	
+			self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+class area_add_form (forms.ModelForm):
+	class Meta:
+		model = Area
+		fields = '__all__'
+		labels = {
+			'name':'Nombre'
+		}
+	
+	def __init__(self, *args, **kwargs):
+		super(area_add_form, self).__init__(*args, **kwargs)
+		for field in self.fields:	
+			self.fields[field].widget.attrs.update({'class': 'form-control'})
 

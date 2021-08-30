@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block section %}
 <div class="page-title-icon">
-    <i class="fa fa-plus-circle icon-gradient bg-happy-itmeo"></i>
+    <i class="fa fa-plus-circle icon-gradient bg-sunny-morning"></i>
 </div>
 <div>
-    Registro de Muestra
+    Registro de Residuos
     <div class="page-title-subheading">
-        Registra todos los datos para agragar nueva muestra
+        Registra todos los datos para agregar nuevo Residuo
     </div>
 </div>
 {% endblock %}
@@ -33,25 +33,29 @@
                 {% endif %}
 
 
-                <div class="card-body"><h5 class="card-title">Registrar nueva muestra</h5>
+                <div class="card-body"><h5 class="card-title">Registrar nuevo Residuo</h5>
                     {% load cloudinary %}
                     <form action="" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         
                         {% for field in form %}
                             <div class="position-relative form-group">
-                                {% if field.name != "photo" %}
+                                {% if field.name != "photo" and  field.name != "document"   %}
                                     {{ field.errors }}    
                                     {{ field.label }}    
                                     {{ field }}
                                 {% else %}
-                                    <label for="{{ form.photo.name }}" class="">Foto</label>
-                                    <input type="file" accept="image/*" name="{{ form.photo.name }}" id="{{ form.photo.id_for_label }}" class="form-control-file" capture="camera">
-                                    <small class="form-text text-muted">Selecciona una foto para adjuntar.</small>            
                                 {% endif %}
                             </div>
-                                                            
-                        {% endfor %}
+                            
+                            {% endfor %}
+                            <label for="{{ form.photo.name }}" class="">Foto</label>
+                            <input type="file" accept="image/*" name="{{ form.photo.name }}" id="{{ form.photo.id_for_label }}" class="form-control-file" capture="camera">
+                            <small class="form-text text-muted">Selecciona una foto para adjuntar.</small>            
+                            <hr>
+                            <label for="{{ form.document.name }}" class="">Documento</label>
+                            <input type="file" accept="image/*" name="{{ form.document.name }}" id="{{ form.document.id_for_label }}" class="form-control-file">
+                            <small class="form-text text-muted">Selecciona un Documento para adjuntar.</small>            
                         <hr>
                         <input type="submit" value="Guardar" class="mt-1 btn btn-primary">
                         <a href="{% url 'sample_list' %}" class="mt-1 btn btn-secondary"> Cancelar </a>

@@ -25,7 +25,7 @@
 
     </div>
     <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
-        <div class="app-header header-shadow">
+        <div class="app-header header-shadow bg-dark header-text-light">
             <!-- LOGO -->
             <div class="app-header__logo">
                 <div class="logo-src"></div>
@@ -68,7 +68,11 @@
                                 <div class="widget-content-left">
                                     <div class="btn-group">
                                         <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                            <img width="42" height="42" class="rounded-circle" src="{{ ctx_person.photo.url }}" alt="">
+                                            
+                                            {% if ctx_person.photo.url %}
+                                                <img width="42" height="42" class="rounded-circle" src="{{ ctx_person.photo.url }}" alt="">                                                
+                                            {% endif %}
+                                            
                                             <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                         </a>
                                         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
@@ -88,7 +92,7 @@
                                         {{ ctx_person.user }}
                                     </div>
                                     <div class="widget-subheading">
-                                        rol : {{ ctx_person.rol }}
+                                        rol : {{ ctx_person.rol.name }}
                                     </div>
                                 </div>
 
@@ -100,7 +104,7 @@
 
         <!-- LEFT MENU  -->      
         <div class="app-main">
-                <div class="app-sidebar sidebar-shadow">
+                <div class="app-sidebar sidebar-shadow bg-warning sidebar-text-dark">
                     <div class="app-header__logo">
                         <div class="logo-src"></div>
                         <div class="header__pane ml-auto">
@@ -133,21 +137,21 @@
                     </div>    <div class="scrollbar-sidebar">
                         <div class="app-sidebar__inner">
                             <ul class="vertical-nav-menu">
-                                <li class="app-sidebar__heading">Muestras</li>
-                                {% if ctx_person.rol == 'instructor' %}                                    
+                                <li class="app-sidebar__heading">Residuos</li>
+                                {% if ctx_person.rol.type == 'administrador' %}                                    
                                 <li>
                                     <a href="{% url 'sample_list' %}" class="">
                                         <i class="metismenu-icon pe-7s-display2"></i>
-                                        Todas las Muestras
+                                        Todos los Residuos
                                     </a>
                                 </li>
                                 {% endif %}
                                 
-                                {% if ctx_person.rol == 'aprendiz' or ctx_person.rol == 'instructor' %}                                    
+                                {% if ctx_person.rol.type == 'registrado' or ctx_person.rol.type == 'administrador' %}                                    
                                     <li>
                                         <a href="{% url 'my_sample_list' %}" class="">
                                             <i class="metismenu-icon pe-7s-display2"></i>
-                                            Mis Muestras
+                                            Mis Residuos
                                         </a>
                                     </li>
                                 {% endif %}
@@ -158,8 +162,16 @@
                                         Mi Perfil
                                     </a>
                                 </li>
+                                <!-- LOGIN LOGOUT-->
+                                <li>
+                                    <a href="{% url 'logout' %}" onclick="return confirm('Seguro que desea Cerrar Sesión?')" class="">
+                                        <i class="metismenu-icon pe-7s-user"></i>
+                                        Cerrar Sesión
+                                    </a>
+                                </li>
+                                <!-- END OF LOGIN LOGOUT-->
                                 
-                                {% if ctx_person.rol == 'instructor' %}
+                                {% if ctx_person.rol.type == 'administrador' %}
                                     <li class="app-sidebar__heading">Usuarios</li>
                                     <li>
                                         <a href="#">
@@ -172,6 +184,35 @@
                                                 <a href="{% url 'person_list' %}">
                                                     <i class="metismenu-icon"></i>
                                                     Usuarios
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li class="app-sidebar__heading">Fichas y Programas</li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="metismenu-icon pe-7s-diamond"></i>
+                                            Fichas
+                                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a href="{% url 'course_list' %}">
+                                                    <i class="metismenu-icon"></i>
+                                                    Fichas
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'generic_list' str_view='program' %}">
+                                                    <i class="metismenu-icon"></i>
+                                                    Programas
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'generic_list' str_view='area' %}">
+                                                    <i class="metismenu-icon"></i>
+                                                    Áreas
                                                 </a>
                                             </li>
                                         </ul>
@@ -198,9 +239,14 @@
                                     {% block section %}
                                     {% endblock section %}
                                 </div>
+                                {% block menu_icons %}
+                                {% include 'home/menu_icons.html' %}
+                                {% endblock menu_icons %}
+        
 
                             </div>
-                        </div>            
+                        </div>  
+                        
                         {% block content %}
 
 

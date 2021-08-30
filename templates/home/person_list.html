@@ -3,7 +3,7 @@
 
 {% block section %}
     <div class="page-title-icon">
-        <i class="fa fa-list-alt icon-gradient bg-happy-itmeo"></i>
+        <i class="fa fa-list-alt icon-gradient bg-sunny-morning"></i>
     </div>
     <div>
         Usuarios
@@ -51,7 +51,7 @@
 
 
 
-    {% if person.rol == 'instructor' %}
+    {% if person.rol.type == 'administrador' %}
         <div>
             <a href="{% url 'person_add' %}" class="mb-2 mr-2 btn btn-primary"> 
                 <i class="fa fa-plus-circle"></i>
@@ -113,7 +113,9 @@
                                         <div class="widget-content-wrapper">
                                             <div class="widget-content-left mr-3">
                                                 <div class="widget-content-left">
-                                                    <img width="40" class="rounded-circle" src="{{ s.photo.url }}" alt="">
+                                                    {% if s.photo.url  %}
+                                                        <img width="40" class="rounded-circle" src="{{ s.photo.url }}" alt="">
+                                                    {% endif %}                                                
                                                 </div>
                                             </div>
                                             <div class="widget-content-left flex2">
@@ -124,7 +126,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="text-center">{{ s.rol }}</td>
+                                <td class="text-center">{{ s.rol.name }}</td>
                                 <td class="text-center">{{ s.email }}
                                 <td class="text-center">{{ s.phone }}
 
@@ -147,9 +149,9 @@
                                 
                                 <td class="text-center">
                                     <a href="{% url 'person_detail' id_person=s.id %}" type="button" id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-info"><i class="fa fa-eye"></i></a>
-                                    {% if person.rol == 'instructor' %}
+                                    {% if person.rol.type == 'administrador' %}
                                         <a href="{% url 'person_edit' id_person=s.id %}" id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-warning"><i class="fa fa-edit"></i></a>
-                                        <a href="{% url 'person_delete' id_person=s.id %}" id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                                        <a href="{% url 'person_delete' id_person=s.id %}" onclick="return confirm('seguro que desea eliminar este item?')"  id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-danger"><i class="fa fa-trash"></i></a>
                                     {% endif %}
                                            
                                 </td>
@@ -180,7 +182,7 @@
             </div>
         </div>
         <div class="col-md-6 col-xl-4">
-            <div class="card mb-3 widget-content bg-arielle-smile">
+            <div class="card mb-3 widget-content bg-vicious-stance">
                 <div class="widget-content-wrapper text-white">
                     <div class="widget-content-left">
                         <div class="widget-heading">Instructores Registrados</div>
@@ -193,7 +195,7 @@
             </div>
         </div>
         <div class="col-md-6 col-xl-4">
-            <div class="card mb-3 widget-content bg-grow-early">
+            <div class="card mb-3 widget-content bg-royal">
                 <div class="widget-content-wrapper text-white">
                     <div class="widget-content-left">
                         <div class="widget-heading">Aprendices Registrados</div>

@@ -14,8 +14,11 @@ def connected_user(u):
 # Create your views here.
 #@login_required (login_url = '/login/')
 def index_view(request):
-	#return render(request, 'home/index.html', locals()) 
-    return redirect('/login/')
+	if request.user.is_authenticated:
+		return redirect ('/my_sample_list/')
+	else:	
+		return render(request, 'home/index.html', locals()) 
+		#return redirect('/login/')
 
 '''
 Authentication Section: login, logout, register, add_person views  
@@ -139,7 +142,7 @@ def person_list_view (request):
 				msg = "No se encontraron resultados por favor cambie su criterio de busqueda"
 	person = connected_user(request.user)
 	users = persons.count()
-	instructors =  Person.objects.filter(rol = 'instructor').count()
+	instructors =  Person.objects.filter(rol__type = 'administrador').count()
 	aprentices = users - instructors
 	return render(request, 'home/person_list.html', locals())
 
@@ -173,6 +176,11 @@ def person_edit_view (request, id_person):
 
 def person_detail_view(request, id_person):
 	object = Person.objects.get(id = id_person)
+	try:
+		assigned = Person_Course.objects.get(person = object)
+	except:
+		pass
+	
 	return render(request, 'home/person_detail.html',locals()) 
 
 def person_status_view (request, id_person):
@@ -190,6 +198,8 @@ def person_status_view (request, id_person):
 		msg = 'el usuario no se pudo cambiar el estado del usuario'
 	print(msg)
 	return redirect('/person_detail/{}'.format(object.id))
+
+
 
 '''
 Samples Section: list, add, detail, edit and delete views
@@ -254,3 +264,164 @@ def sample_delete_view (request, id_sample):
 	sample.delete()
 	return redirect('/sample_list/')
 
+'''
+Courses 
+'''
+@login_required (login_url = '/login/')
+def course_list_view (request):
+	person = connected_user(request.user)
+	list = Course.objects.filter().order_by('-id')
+	if request.method == 'POST':
+		form = course_add_form(request.POST)
+		if form.is_valid():
+			form.save()
+			return render(request, 'home/course_list.html', locals())
+	else:
+		form = course_add_form()
+	return render(request, 'home/course_list.html', locals())
+
+
+@login_required (login_url = '/login/')
+def course_edit_view (request, id_course):
+	person = connected_user(request.user)
+	object = Course.objects.get(id = id_course)
+	if request.method == 'POST':
+		form = course_add_form(request.POST, instance = object)
+	if form.is_valid():
+		form.save()
+
+	else:
+		form = course_add_form(instance = object)
+	return render(request, 'home/course_edit.html', locals())
+
+
+
+@login_required (login_url = '/login/')
+def course_delete_view (request, id_course):
+	course = Course.objects.get(id = id_course)
+	course.delete()
+	return redirect('/course_list/')
+
+@login_required (login_url = '/login/')
+def course_person_view (request, id_person):
+	person = Person.objects.get(id = id_person)
+	courses = Course.objects.filter()
+	# if person selected from list is assigned a course before
+	try:
+		assigned = Person_Course.objects.get(person = person)
+	except:
+		assigned = None
+	# this search form to filter course, in case of find courses and show the registered course 
+	if request.method == 'POST':
+		form = search_form(request.POST)
+		if form.is_valid():
+			x = form.cleaned_data['search']
+			if x:
+				courses = Course.objects.filter(name__icontains = x)
+			else:
+				msj = 'No hay fichas con ese criterio de busqueda'
+	else:
+		form = search_form()
+	return render(request, 'home/course_person.html', locals())
+
+@login_required (login_url = '/login/')
+def course_assign_view (request, id_person, id_course):
+	course = Course.objects.get(id = id_course)
+	person = Person.objects.get(id = id_person)
+	try:
+		# if a student has been assigned a course before
+		assigned = Person_Course.objects.get(person = person)#, course = course)
+		# if course is diferent of assigned course, re assing new course  
+		if course != assigned.course:
+			assigned.course = course
+			assigned.save()
+	except:
+		# if a student hasnt been assigned a course
+		assigned = None
+		assigned = Person_Course()
+		assigned.person = person 
+		assigned.course = course
+		assigned.save()
+
+	return redirect ('/person_detail/{}/'.format(person.id))
+
+@login_required (login_url = '/login/')
+def generic_list_view (request, str_view):
+	person = connected_user(request.user)
+
+	if (str_view.lower() == 'area'):
+		list = Area.objects.filter()
+	elif (str_view.lower() == 'program'):
+		list = Program.objects.filter()
+	else:
+		return redirect('/course_list/')
+	return render(request, 'home/generic_list.html', locals())
+
+@login_required (login_url = '/login/')
+def generic_add_view (request, str_view):
+	# Add - Area
+	if (str_view.lower() == 'area'):
+		if request.method == 'POST':
+			form = area_add_form(request.POST, request.FILES)
+			if form.is_valid():
+				form.save()
+				return redirect('/{}_list/'.format(str_view))
+		else: # GET		
+			form = area_add_form()
+	
+	# Add - Program
+	elif (str_view.lower() == 'program'):
+		if request.method == 'POST':
+			form = program_add_form(request.POST, request.FILES)
+			if form.is_valid():
+				form.save()
+				return redirect('/{}_list/'.format(str_view))
+		else: # GET
+			form = program_add_form()
+	else:
+		return redirect('/course_list/')
+	
+	return render(request, 'home/generic_add.html', locals())
+
+@login_required (login_url = '/login/')
+def generic_edit_view (request, str_view, id_view):
+	# Add - Area
+	if (str_view.lower() == 'area'):
+		obj = Area.objects.get(id = id_view)
+		if request.method == 'POST':
+			form = area_add_form(request.POST, request.FILES, instance = obj)
+			if form.is_valid():
+				form.save()
+				return redirect('/{}_list/'.format(str_view))
+		else: # GET		
+			form = area_add_form(instance = obj)
+	
+	# Add - Program
+	elif (str_view.lower() == 'program'):
+		obj = Program.objects.get(id = id_view)
+		if request.method == 'POST':
+			form = program_add_form(request.POST, request.FILES, instance = obj)
+			if form.is_valid():
+				form.save()
+				return redirect('/{}_list/'.format(str_view))
+		else: # GET
+			form = program_add_form(instance = obj)
+	else:
+		return redirect('/course_list/')
+	
+	return render(request, 'home/generic_add.html', locals())
+
+@login_required (login_url = '/login/')
+def generic_delete_view (request, str_view, id_view):
+	
+	if (str_view.lower() == 'area'):
+		obj = Area.objects.get(id = id_view)
+		obj.delete()
+    
+	elif (str_view.lower() == 'program'):
+		obj = Program.objects.get(id = id_view)
+		obj.delete()
+	else:
+		return redirect('/{}_list/'.format(str_view))
+
+	return redirect('/{}_list/'.format(str_view))

@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+
+{% block section %}
+    <div class="page-title-icon">
+        <i class="fa fa-list-alt icon-gradient bg-sunny-morning"></i>
+    </div>
+    <div>
+        Fichas
+        <div class="page-title-subheading">
+            Lista de Fichas       
+        </div>
+    </div>
+{% endblock section %}
+    
+{% block content %}
+
+<div class="main-card mb-3 card">
+    <div class="card-body">
+        <h5 class="card-title">Agregar Ficha</h5>
+        <div class="collapse" id="collapseExample123" style="">
+
+        <!-- SEARCH BEGIN -->
+
+        
+        <div class="col-md-8 offset-md-2">
+            <div class="main-card mb-2 card ">
+                {% if msg %}
+                <div class="alert alert-info fade show" role="alert">
+                    <ul class="messages">
+                        <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ msg }} </li>
+                    </ul>   
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">Agregar Ficha</h5>
+                    <form class="col-sm-12" action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}                                                        
+                        {% for field in form %}
+                            {{field.errors}}  
+                            <div class="position-relative row form-group">
+                                <label for="{{field.label}}" class="col-sm-2 col-form-label">{{field.label}}</label>
+                                <div class="col-sm-10">
+                                    {{field}} 
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <input type="submit" value="Agregar Ficha" class="btn btn-primary">
+                    </form>
+                </div>
+            </div>
+        </div>
+ 
+    <!-- END OF SEARCH -->
+
+
+
+        </div>
+    </div>
+    <div class="card-footer">
+        <button type="button" data-toggle="collapse" href="#collapseExample123" class="btn btn-primary collapsed  bg-asteroid" aria-expanded="false">Ver Formulario para Agregar Ficha </button>
+    </div>
+</div>
+
+
+
+
+    
+    
+
+
+
+        
+    
+    {% if list %}
+        
+        
+    <div class="row">
+        <div class="col-md-12">
+            <div class="main-card mb-3 card">
+                <div class="card-header">Fichas Registradas 
+                    <div class="btn-actions-pane-right">
+                        <div role="group" class="btn-group-sm btn-group">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th>Ficha</th>
+                            <th class="text-center">Programa</th>
+                            <th class="text-center">Área</th>
+                            <th class="text-center">Estado</th>
+                            <th class="text-center">Opciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        
+                        {% for s in list %}
+                        
+                            <tr>
+                                <td class="text-center text-muted">{{ s.id }}</td>
+                                <td>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-3">
+                                                <div class="widget-content-left">
+                                                    <img width="40" class="rounded-circle" src="assets/images/avatars/4.jpg" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-left flex2">
+                                                <div class="widget-heading">{{ s.name }} </div>
+                                                <div class="widget-subheading opacity-7">Fecha de Inicio: {{ s.initial_date}}</div>
+                                                <div class="widget-subheading opacity-7">Fecha de Fin: {{ s.final_date}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-3">
+                                                <div class="widget-content-left">
+                                                    <img width="40" class="rounded-circle" src="{{ s.photo.url }}" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-left flex2">
+                                                <div class="widget-heading">{{ s.program.name }}</div>
+                                                <div class="widget-subheading opacity-7">{{ s.rol }} 
+                                                    {{ s.person.phone }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">{{ s.program.area.name }}</td>
+                                
+                                <td class="text-center">
+                                    {% if s.status %}
+                                        <div class="mb-2 mr-2 badge badge-success">
+                                            <i class="fa fa-user"> </i> 
+                                            <i class="fa fa-check"> </i> 
+                                        </div> 
+                                        <a href="#" class="mb-2 mr-2 badge badge-secondary">Activa</a>
+                                    {% else %}
+                                        <div class="mb-2 mr-2 badge badge-secondary">
+                                            <i class="fa fa-user-times"></i>
+                                        </div> 
+                                        <a href="#" class="mb-2 mr-2 badge badge-info">Inactiva</a>
+                                    {% endif %}
+                                </td>
+                                
+                                
+                                
+                                <td class="text-center">
+                                    {% if person.rol.type == 'administrador' %}
+                                        <a href="{% url 'course_edit' id_course=s.id %}" id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-warning"><i class="fa fa-edit"></i></a>
+                                        <a href="{% url 'course_delete' id_course=s.id %}" onclick="return confirm('seguro que desea eliminar este item?')"  id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                                    {% endif %}
+                                           
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="main-card mb-3 card">
+                <div class="card-header">Usuarios 
+                    <h2>No hay Registros, desea agregar uno?  </h2>
+                    <a href="">Agregar Ficha</a>
+
+                    {% if person.rol.type == 'administrador' %}
+                        <div>
+                            <a href="{% url 'person_add' %}" class="mb-2 mr-2 btn btn-primary"> 
+                                <i class="fa fa-plus-circle"></i>
+                                Nueva Usuario 
+                            </a>
+                        </div>        
+                    {% endif %}
+            
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
+
+    <div class="row">
+
+        <div class="col-md-6 col-xl-4">
+            <div class="card mb-3 widget-content bg-midnight-bloom">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">Usuarios Totales Totales</div>
+                        <div class="widget-subheading">cantidad de todos los Usuarios</div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers text-white"><span>{{ users }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <div class="card mb-3 widget-content bg-vicious-stance">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">Instructores Registrados</div>
+                        <div class="widget-subheading">Total de Instructores Registrados</div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers text-white"><span>{{ instructors }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <div class="card mb-3 widget-content bg-royal">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">Aprendices Registrados</div>
+                        <div class="widget-subheading">total de aprendices registrados</div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers text-white"><span>{{ aprentices }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+{% endblock content %}
+
+
+
+
+{% block js %}
+{% endblock js %}
+    

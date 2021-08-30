@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+
+{% block section %}
+    <div class="page-title-icon">
+        <i class="fa fa-list-alt icon-gradient bg-sunny-morning"></i>
+    </div>
+    <div>
+        Crear {{ str_view }}
+        <div class="page-title-subheading">
+            Agregar {{ str_view }}       
+        </div>
+    </div>
+{% endblock section %}
+    
+{% block content %}
+
+        <!-- FORM ADD BEGIN -->
+
+        
+        <div class="col-md-8 offset-md-2">
+            <div class="main-card mb-2 card ">
+                {% if msg %}
+                <div class="alert alert-info fade show" role="alert">
+                    <ul class="messages">
+                        <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ msg }} </li>
+                    </ul>   
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">Agregar {{ str_view }}</h5>
+                    <form class="col-sm-12" action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}                                                        
+                        {% for field in form %}
+                            {{field.errors}}  
+                            <div class="position-relative row form-group">
+                                <label for="{{field.label}}" class="col-sm-2 col-form-label">{{field.label}}</label>
+                                <div class="col-sm-10">
+                                    {{field}} 
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <input type="submit" value="Guardar {{ str_view }}" class="btn btn-primary">
+                    </form>
+                </div>
+            </div>
+        </div>
+ 
+    <!-- END OF FORM ADD -->
+
+
+
+{% endblock content %}
+
+
+
+
+{% block js %}
+{% endblock js %}
+    

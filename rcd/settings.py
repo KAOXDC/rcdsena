@@ -28,7 +28,7 @@ SECRET_KEY = '36=nv^ainqnak5n0-r@36p54lr%8(h3@+m4mlsnv#cc-yw(@er'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['rcdsena.herokuapp.com']
+ALLOWED_HOSTS = []#['rcdsena.herokuapp.com']
 
 
 # Application definition
@@ -83,22 +83,22 @@ WSGI_APPLICATION = 'rcd.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'da2i73hcs3451o',
-        'HOST': 'ec2-107-21-10-179.compute-1.amazonaws.com',
-        'USER': 'aeypwccjirxeew',
-        'PASSWORD': 'fe5e7960e0074e09d6d4cb8a01b49ebfb67c2cda857853359a670276028f2aa5',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db_2.sqlite3',
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'da2i73hcs3451o',
+#         'HOST': 'ec2-107-21-10-179.compute-1.amazonaws.com',
+#         'USER': 'aeypwccjirxeew',
+#         'PASSWORD': 'fe5e7960e0074e09d6d4cb8a01b49ebfb67c2cda857853359a670276028f2aa5',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
@@ -138,11 +138,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [
-#     BASE_DIR / "static",
-#     #'/var/www/static/',
-# ]
-STATIC_ROOT = 'static'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+    #'/var/www/static/',
+]
+# STATIC_ROOT = 'static'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'

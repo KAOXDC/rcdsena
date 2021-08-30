@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block section %}
+    <div class="page-title-icon">
+        <i class="fa fa-list-alt icon-gradient bg-sunny-morning"></i>
+    </div>
+    <div>
+        Asignar Ficha  
+        <div class="page-title-subheading">
+            <strong>{{ person.user.first_name }} </strong> está asignado/a a la ficha <strong>{{ assigned.course.name }}</strong>         
+        </div>
+    </div>
+{% endblock section %}
+    
+{% block content %}
+
+        <!-- SEARCH BEGIN -->
+
+        <center>
+                <div class="col-md-6">
+                    <div class="main-card mb-3 card ">
+                        {% if msg %}
+                        <div class="alert alert-info fade show" role="alert">
+                            <ul class="messages">
+                                <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ msg }} </li>
+                            </ul>   
+                        </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <form class="form-inline" action="" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}                                                        
+                                {% for field in form %}
+                                    <div class="position-relative form-group">
+                                        {{field.errors}}
+                                        {{field.label}} <pre> </pre>
+                                        {{field}} <pre> </pre>
+                                    </div>
+                                {% endfor %}
+                                <input type="submit" value="Buscar Ficha" class="btn btn-primary">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </center>
+
+            <!-- END OF SEARCH -->
+    
+    
+
+
+
+    
+    {% if courses %}
+        
+        
+    <div class="row">
+        <div class="col-md-12">
+            <div class="main-card mb-3 card">
+                <div class="card-header">Fichas 
+                    <div class="btn-actions-pane-right">
+                        <div role="group" class="btn-group-sm btn-group">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th>Ficha</th>
+                            <th class="text-center">Programa</th>
+                            <th class="text-center">Área</th>
+                            <th class="text-center">Fecha Inicio</th>
+                            <th class="text-center">Fecha Fin</th>
+                            <th class="text-center">Opciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        
+                        {% for l in courses %}
+                        
+                            <tr>
+                                <td class="text-center text-muted">{{ l.id }}</td>
+                                <td class="text-center">{{ l.name }}</td>
+                                <td class="text-center">{{ l.program.name }}</td>
+                                <td class="text-center">{{ l.program.area.name }}</td>
+                                <td class="text-center">{{ l.initial_date }}</td>
+                                <td class="text-center">{{ l.final_date }}</td>
+
+                                <td class="text-center">
+                                    {% if person.user.is_active %}
+
+                                        {% if assigned == None  %}                                           
+                                            <a href="{% url 'course_assign' id_person=person.id id_course=l.id %}" class="mb-2 mr-2 badge badge-success">Asignar Ficha</a>
+                                            
+                                        {% else %}
+                                            {% if assigned.course == l %}
+
+                                                <p class="mb-2 mr-2 badge badge-secondary">Asignada</a>
+                                            {% else %}
+
+                                        
+                                                <a href="{% url 'course_assign' id_person=person.id id_course=l.id %}" class="mb-2 mr-2 badge badge-info">Re Asignar ficha</a>
+                                            {% endif %}
+                                        {% endif %}
+                                            
+                                    {% else %}
+                                        <div class="mb-2 mr-2 badge badge-success">
+                                            <i class="fa fa-user-times"></i>
+                                            <i class="fa fa-user"> </i> 
+                                            <i class="fa fa-check"> </i> 
+                                        </div> 
+                                            <p>Este usuario no se puede asignar </p>
+                                        
+                                    {% endif %}
+                                </td>
+                                
+                                
+                                
+                                
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+        {% if person.rol.type != 'administrador' %}
+            <div align ="center" >
+                <h4>No extiste la ficha "{{ x }}" desea agragarla? </h4>
+                <a href="{% url 'course_list' %}" class="mb-2 mr-2 btn btn-primary"> 
+                    <i class="fa fa-plus-circle"></i>
+                    Agregar Ficha
+                </a>
+            </div>        
+        {% endif %}
+            
+
+    {% endif %}
+
+
+{% endblock content %}
+
+
+
+
+{% block js %}
+{% endblock js %}
+    

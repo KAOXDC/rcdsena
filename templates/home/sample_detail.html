@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block section %}
     <div class="page-title-icon">
-        <i class="fa fa-file icon-gradient bg-happy-itmeo"></i>
+        <i class="fa fa-file icon-gradient bg-sunny-morning"></i>
     </div>
     <div>
         Detalle de la Muestra
@@ -73,7 +73,7 @@
             </div>
         </div>
         
-        {% if person.rol == 'aprendiz' %}
+        {% if person.rol.type == 'registrado' %}
             <a class="btn btn-secondary" href="{% url 'sample_list' %}">Ver Todas las muestras</a>
         {% else %}
             <a class="btn btn-secondary" href="{% url 'my_sample_list' %}">Ver mi lista de muestras</a>
