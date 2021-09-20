@@ -1,9 +1,11 @@
 from os import name
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.fields import EmailField
 from cloudinary.models import CloudinaryField
-
+import datetime
+from django.core.exceptions import ValidationError
 
 methods = (
     ('mecanica', 'Mecanica'),
@@ -99,12 +101,10 @@ class Origin(models.Model):
 class Sample(models.Model):
     """Model definition for Sample."""
     date_time           = models.DateTimeField(auto_now_add = True) 
+    date                = models.DateField(null=True, blank= True) # waste sample registered manually 
     volume              = models.DecimalField(max_digits = 6, decimal_places= 2)
-    #demolition_method   = models.CharField(max_length = 50, choices = methods)
-    #origin              = models.CharField(max_length = 50, choices = origins)
-    #demolition_object   = models.CharField(max_length = 50, choices = reasons)
-    #photo               = models.ImageField(upload_to = 'samples', null=True, blank= True)
-    #document            = models.FileField(upload_to = 'documents', null=True, blank= True)
+    instructor          = models.CharField(max_length = 100, null=True, blank= True)
+    course              = models.CharField(max_length = 100, null=True, blank= True) 
     # Phothos and Documents wil be adden in cloudinary temporary, until deploy this app to Cloud SENA Server
     photo               = CloudinaryField('samples', null=True, blank= True)
     document            = CloudinaryField('documents', null=True, blank= True)
@@ -120,7 +120,12 @@ class Sample(models.Model):
 
     def __str__(self):
         """Unicode representation of Sample."""
-        return str(self.date_time) + ' ' + str(self.volume) + ' m3 ' + self.demolition_method + ' ' + str(self.person)
+        return str(self.date_time) + ' ' + str(self.volume) + ' m3 ' + ' ' + str(self.person)
+
+    def save(self, *args, **kwargs):
+        if self.date > datetime.date.today():
+            raise ValidationError('La fecha no puede ser superor a la fecha actual')
+        super (Sample, self).save(*args, **kwargs)
 
 '''
 Courses Area
@@ -151,7 +156,7 @@ class Course (models.Model):
         verbose_name_plural = 'Fichas'
 
     def __str__ (self):
-        return self.name + ' ' + str(self.initial_date) + ' ' + str(self.status)
+        return self.name #+ ' ' + str(self.initial_date) + ' ' + str(self.status)
 
 class Person_Course (models.Model):
     person = models.ForeignKey(Person, on_delete= models.PROTECT, null=True, blank=True)

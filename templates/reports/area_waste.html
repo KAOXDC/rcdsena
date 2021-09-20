@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block section %}
+<div class="page-title-icon">
+    <i class="fa fa-fw icon-gradient bg-sunny-morning" aria-hidden="true" title="Copy to use pie-chart"></i>
+</div>
+<div>
+    Reporte <strong>{{ person.id }}</strong>
+    <div class="page-title-subheading">
+        Reportes de residuos por área 
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block content %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Buscar" class="btn btn-success">
+    </form>
+
+<hr>
+Grafica Reportes de residuos por área 
+<br>
+Total 
+{{ total }}
+<br>
+
+Resultado
+{% for i in result %}
+<p>
+   AREA  {{ i.area }}
+</p>
+<p>
+   PROGRAMA {{ i.program }}
+<p>
+<p>
+    CANTIDAD {{ i.cant }}
+</p>
+    
+{% endfor %}
+    
+<hr>
+{{ l_cont }}
+<br>
+
+Programas
+{{ courses.program.name }}
+<br>
+
+Areas
+{{ areas }}
+
+<hr>
+
+{% if list %}
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="main-card mb-3 card">
+                <div class="card-header">Residuos  
+                    <div class="btn-actions-pane-right">
+                        <div role="group" class="btn-group-sm btn-group">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th>Fecha</th>
+                            <th class="text-center">Volumen m<sup>3</sup></th>
+                            <th class="text-center">Componentes</th>
+                            <th class="text-center">Origen</th>
+                            <th class="text-center">Ficha</th>
+                            <th class="text-center">Usuraio</th>
+                            <th class="text-center">Opciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        
+                        {% for s in list %}
+                            <tr>
+                                <td class="text-center text-muted">{{ forloop.counter }}</td>
+                                <td>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-3">
+                                                <div class="widget-content-left">
+                                                    <img width="40" class="rounded-circle" src="assets/images/avatars/4.jpg" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-left flex2">
+                                                <div class="widget-heading">{{ s.date_time.date }}</div>
+                                                <div class="widget-subheading opacity-7">{{ s.date_time|time:"h:i a" }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">{{ s.volume }} m<sup>3</sup></td>
+                                <td class="text-center">{{ s.components }}</td>
+                                <td class="text-center">{{ s.origin }}
+                                </td>
+                                <td class="text-center">
+                                    {{ s.course }}
+                                    {{ s.course.program.name }}
+                                    {{ s.course.program.area.name }}
+                                </td>
+                                <td>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-3">
+                                                <div class="widget-content-left">
+                                                    {% if s.person.photo.url %}
+                                                        <img width="40" height="40px" class="rounded-circle" src="{{ s.person.photo.url }}" alt="">
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-left flex2">
+                                                <div class="widget-heading">
+                                                    {{ s.person.user.first_name }} {{ s.person.user.last_name }}
+                                                </div>
+                                                <div class="widget-subheading opacity-7">
+                                                    {{ s.person.rol.type }} 
+                                                    <i class="pe-7s-phone"></i>
+                                                    {{ s.person.phone }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                
+                                <td class="text-center">
+                                    <a href="{% url 'sample_detail' id_sample=s.id %}" type="button" id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-info"><i class="fa fa-eye"></i></a>
+                                    {% if ctx_person.rol.type == 'administrador' %}
+                                        <a href="{% url 'sample_edit' id_sample=s.id %}" id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-warning"><i class="fa fa-edit"></i></a>
+                                        <a href="{% url 'sample_delete' id_sample=s.id %}" onclick="return confirm('seguro que desea eliminar este item?')" id="PopoverCustomT-1" class="mb-2 mr-2 btn-transition btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                                    {% endif %}   
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% else %}
+    <h3>No hay registros en ese rango de fechas </h3>
+{% endif %}
+        
+
+
+
+{% endblock content %}
+    

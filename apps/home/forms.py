@@ -4,6 +4,7 @@ from django.forms import widgets
 from django.forms.widgets import TextInput, Widget
 from .models import *
 from django.contrib.auth.models import User
+import datetime
 
 
 class search_form (forms.Form):
@@ -12,6 +13,7 @@ class search_form (forms.Form):
 		required=False,
 		widget=forms.TextInput(attrs={'class':'form-control',  'placeholder':'Ingrese su criterio de busqueda'})
 		)
+
 class login_form (forms.Form):
 	username    = forms.CharField(
 		label = 'Usuario o Correo',
@@ -85,6 +87,13 @@ class person_form(forms.ModelForm):
 			self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 class sample_add_form (forms.ModelForm):
+	instructor 	= forms.ModelChoiceField(queryset=Person.objects.filter(rol__name__icontains = 'instructor'))
+	course 		= forms.ModelChoiceField(queryset=Course.objects.filter(status = True))
+	date 		= forms.DateField(
+		label='Fecha ',
+		required=False,
+		widget=forms.DateInput(attrs={'type':'date','class':'form-control'})
+		) 	
 	class Meta:
 		model = Sample
 		fields = '__all__'
@@ -92,13 +101,31 @@ class sample_add_form (forms.ModelForm):
 		labels = {
 			'volume': 'Volumen en Metros Cubicos',
 			'components': 'Componentes',
-			'origin': 'Origen',
+			'origin': 'Actividad',
+			'date': 'Fecha',
+			'instructor': 'Instructor a cargo',
+			'course': 'Ficha'
 		}
 
 	def __init__(self, *args, **kwargs):
 		super(sample_add_form, self).__init__(*args, **kwargs)
 		for field in self.fields:	
 			self.fields[field].widget.attrs.update({'class': 'form-control'})
+	
+	def clean_date (self):
+		date = self.cleaned_data['date']
+		if  date > datetime.date.today():			
+			raise forms.ValidationError('La fecha no puede ser superior a la fecha actual')
+		return super(sample_add_form, self).clean()
+
+	def clean_volume (self):
+		volume = self.cleaned_data['volume']
+		if  volume >= 0.1:
+			pass
+		else:			
+			raise forms.ValidationError('el volumen no puede ser cero o negativo')
+		return super(sample_add_form, self).clean()
+
 
 class course_add_form (forms.ModelForm):
 	class Meta:

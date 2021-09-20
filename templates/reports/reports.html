@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block section %}
+<div class="page-title-icon">
+    <i class="fa fa-fw icon-gradient bg-sunny-morning" aria-hidden="true" title="Copy to use pie-chart"></i>
+</div>
+<div>
+    Reportes <strong>{{ person.id }}</strong>
+    <div class="page-title-subheading">
+        Seccion de Reportes 
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    <h1>Reportes</h1>
+    
+
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body"><h5 class="card-title">List group buttons</h5>
+                <div>
+                    <ul class="list-group">
+                        <button class="list-group-item-action list-group-item" onclick="location.href='{% url 'area_waste' %}'">Residuos por área</button>
+                        <button class="list-group-item-action list-group-item" onclick="location.href='/profile_edit/'">Más genero la ficha</button>
+                        <button class="list-group-item-action list-group-item" onclick="location.href='/profile_edit/'">Tipo de residuo</button>
+                        <button class="list-group-item-action list-group-item" onclick="location.href='/profile_edit/'">Actividad </button>
+                        <button class="list-group-item-action list-group-item" onclick="location.href='/profile_edit/'">Área</button>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+{% endblock content %}
+    

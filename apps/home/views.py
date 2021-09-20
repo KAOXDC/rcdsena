@@ -236,8 +236,8 @@ def sample_add_view (request):
 			sample.save()
 			messages.success(request, 'Muestra agregada satisfactoriamente')
 
-	
-	form = sample_add_form()
+	else:
+		form = sample_add_form()
 	return render (request, 'home/sample_add.html', locals())
 
 @login_required (login_url = '/login/')
