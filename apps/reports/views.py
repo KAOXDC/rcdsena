@@ -54,11 +54,11 @@ class area_waste_view (View):
             areas = courses.filter(id__in = [i.id for i in programs]) 
 
 
-
-
-
-
             programas = Program
             areas = list.count()
+
+            # Waste Report per Course / Ficha
+            # result = Sample.objects.filter(date__range=(initial, final))
+
         return render(request, self.template_name, locals())
 
