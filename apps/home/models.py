@@ -120,7 +120,7 @@ class Sample(models.Model):
 
     def __str__(self):
         """Unicode representation of Sample."""
-        return str(self.date_time) + ' ' + str(self.volume) + ' m3 ' + ' ' + str(self.person)
+        return str(self.date_time) + ' ' + str(self.volume) + ' m3 ' + ' ' + str(self.person) + ' ' + str(self.course)
 
     def save(self, *args, **kwargs):
         if self.date > datetime.date.today():
